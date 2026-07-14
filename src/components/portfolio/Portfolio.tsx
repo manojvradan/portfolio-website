@@ -312,12 +312,32 @@ function AboutSection({
   city: CityKey;
   onSelectCity: (c: CityKey) => void;
 }) {
-  const cityPhotoCounts: Record<CityKey, number> = {
-    Chennai: 3,
-    Tokyo: 3,
-    Singapore: 3,
-    India: 3,
-    Sydney: 3,
+  const cityImages: Record<CityKey, string[]> = {
+    Chennai: [
+      "/images/chennai/P3260062.JPG",
+      "/images/chennai/P3300073.JPG",
+      "/images/chennai/P4110821.JPG",
+    ],
+    Tokyo: [
+      "/images/tokyo/13151714694_83bccb6159_o.jpg",
+      "/images/tokyo/13902750636_4fea58df85_o.jpg",
+      "/images/tokyo/IMG_9300.JPG",
+    ],
+    Singapore: [
+      "/images/singapore/IMG_0453.jpg",
+      "/images/singapore/IMG_4946.jpg",
+      "/images/singapore/IMG_8322.jpg",
+    ],
+    India: [
+      "/images/vellore/7e222065-5e12-48dd-ae8e-3a29ef6f0ccf.jpg",
+      "/images/vellore/IMG_5223.png",
+      "/images/vellore/IMG_7675.png",
+    ],
+    Sydney: [
+      "/images/sydney/IMG_2905.JPG",
+      "/images/sydney/IMG_3626.png",
+      "/images/sydney/IMG_3839.png",
+    ],
   };
 
   const dotStyle = (active: boolean): CSSProperties => ({
@@ -457,11 +477,11 @@ function AboutSection({
                 top: `${c.top}%`,
                 transform: "translate(-50%,-50%)",
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: c.labelPos === "above" ? "column-reverse" : "column",
                 alignItems: "center",
                 gap: 7,
                 cursor: "pointer",
-                zIndex: 3,
+                zIndex: city === c.key ? 4 : 3,
               }}
             >
               <div style={dotStyle(city === c.key)} />
@@ -475,7 +495,7 @@ function AboutSection({
                   borderRadius: 6,
                 }}
               >
-                {c.key} <span style={{ color: "#9a9a96", fontWeight: 400 }}>· {c.age}</span>
+                {c.pinLabel} <span style={{ color: "#9a9a96", fontWeight: 400 }}>· {c.age}</span>
               </div>
             </div>
           ))}
@@ -497,14 +517,28 @@ function AboutSection({
               <span style={{ font: `400 12px ${MONO}`, color: "#9a9a96" }}>{active.ageRange}</span>
             </div>
             <div className="pf-photo-grid">
-              {Array.from({ length: cityPhotoCounts[city] }).map((_, i) => (
-                <div
-                  key={i}
-                  style={{ aspectRatio: "4/5", borderRadius: 12, overflow: "hidden", border: "1px solid #e6e6e2" }}
-                >
-                  <PhotoSlot label={`${city} · photo ${i + 1}`} />
-                </div>
-              ))}
+              {cityImages[city].length > 0
+                ? cityImages[city].map((src, i) => (
+                    <div
+                      key={src}
+                      style={{ aspectRatio: "4/5", borderRadius: 12, overflow: "hidden", border: "1px solid #e6e6e2" }}
+                    >
+                      <img
+                        src={src}
+                        alt={`${city} · photo ${i + 1}`}
+                        loading="lazy"
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      />
+                    </div>
+                  ))
+                : Array.from({ length: 3 }).map((_, i) => (
+                    <div
+                      key={i}
+                      style={{ aspectRatio: "4/5", borderRadius: 12, overflow: "hidden", border: "1px solid #e6e6e2" }}
+                    >
+                      <PhotoSlot label={`${city} · photo ${i + 1}`} />
+                    </div>
+                  ))}
             </div>
           </div>
           <p style={{ font: `400 11.5px ${MONO}`, color: "#c4c4be", margin: "14px 0 0" }}>

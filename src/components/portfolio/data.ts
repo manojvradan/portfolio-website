@@ -138,15 +138,17 @@ export type CityKey = "Chennai" | "Tokyo" | "Singapore" | "India" | "Sydney";
 // reality and would otherwise overlap at this map scale).
 export const CITIES: {
   key: CityKey;
+  pinLabel: string;
   age: string;
   left: number;
   top: number;
+  labelPos: "above" | "below";
   ageRange: string;
   panelTitle: string;
 }[] = [
-  { key: "Chennai", age: "0", left: 27.98, top: 39.35, ageRange: "AGE 0 → 6 · BORN HERE", panelTitle: "Chennai, India" },
-  { key: "Tokyo", age: "6", left: 68.53, top: 9.25, ageRange: "AGE 6 → 12", panelTitle: "Tokyo, Japan" },
-  { key: "Singapore", age: "12", left: 46.14, top: 47.39, ageRange: "AGE 12 → 18", panelTitle: "Singapore" },
-  { key: "India", age: "18", left: 34.14, top: 30.09, ageRange: "AGE 18 → 20 · UNIVERSITY", panelTitle: "Vellore, India" },
-  { key: "Sydney", age: "20", left: 75.76, top: 86.52, ageRange: "AGE 20 → NOW · TRANSFERRED", panelTitle: "Sydney, Australia" },
+  { key: "Chennai", pinLabel: "Chennai", age: "0", left: 31.56, top: 35.11, labelPos: "below", ageRange: "AGE 0 → 6 · BORN HERE", panelTitle: "Chennai, India" },
+  { key: "Tokyo", pinLabel: "Tokyo", age: "6", left: 68.53, top: 9.25, labelPos: "below", ageRange: "AGE 6 → 12", panelTitle: "Tokyo, Japan" },
+  { key: "Singapore", pinLabel: "Singapore", age: "12", left: 46.14, top: 47.39, labelPos: "below", ageRange: "AGE 12 → 18", panelTitle: "Singapore" },
+  { key: "India", pinLabel: "Vellore", age: "18", left: 29.25, top: 32.89, labelPos: "above", ageRange: "AGE 18 → 20 · UNIVERSITY", panelTitle: "Vellore, India" },
+  { key: "Sydney", pinLabel: "Sydney", age: "20", left: 75.76, top: 86.52, labelPos: "below", ageRange: "AGE 20 → NOW · TRANSFERRED", panelTitle: "Sydney, Australia" },
 ];
