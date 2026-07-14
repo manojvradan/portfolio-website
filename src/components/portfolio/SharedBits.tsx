@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { hoverCursor } from "./CustomCursor";
-import { RELEASES, TOP_TRACKS } from "./data";
+import { RELEASES, SPOTIFY_URL, TOP_TRACKS } from "./data";
 
 export const SANS = "var(--font-space-grotesk), system-ui, sans-serif";
 export const MONO = "var(--font-jetbrains-mono), monospace";
@@ -244,7 +244,9 @@ export function TopTracksCard({ dark }: { dark: boolean }) {
         ))}
       </div>
       <a
-        href="#"
+        href={SPOTIFY_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         {...hoverCursor}
         style={{
           marginTop: 16,

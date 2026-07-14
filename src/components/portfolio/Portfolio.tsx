@@ -15,7 +15,7 @@ import {
   SANS,
   TopTracksCard,
 } from "./SharedBits";
-import { AWARDS, CITIES, EXPERIENCE, PROJECTS, UPCOMING, type CityKey } from "./data";
+import { AWARDS, CITIES, EXPERIENCE, PROJECTS, SPOTIFY_URL, UPCOMING, type CityKey } from "./data";
 import { FLIGHT_PATHS, MAP_VIEWBOX, WORLD_LAND_PATH } from "./worldMap";
 
 type Persona = "dev" | "music";
@@ -109,7 +109,7 @@ function DevHero() {
           }}
         >
           <AvailableDot />
-          AVAILABLE FOR WORK
+          TWO TAB VRIDDY
         </div>
         <h1 style={{ font: `600 clamp(52px,9.5vw,118px)/0.9 ${SANS}`, letterSpacing: "-.045em", margin: 0 }}>
           Code,
@@ -313,6 +313,7 @@ function AboutSection({
   onSelectCity: (c: CityKey) => void;
 }) {
   const cityPhotoCounts: Record<CityKey, number> = {
+    Chennai: 3,
     Tokyo: 3,
     Singapore: 3,
     India: 3,
@@ -379,13 +380,13 @@ function AboutSection({
         >
           <div>
             <h3 style={{ font: `600 clamp(24px,3.2vw,34px)/1.05 ${SANS}`, letterSpacing: "-.025em", margin: 0 }}>
-              Four cities, one long way round.
+              Five cities, one long way round.
             </h3>
             <p style={{ font: `400 14px ${SANS}`, color: "#6e6e69", margin: "8px 0 0" }}>
-              Tokyo → Singapore → India → Sydney. Select a city to see photos.
+              Chennai → Tokyo → Singapore → India → Sydney. Select a city to see photos.
             </p>
           </div>
-          <div style={{ font: `400 11px ${MONO}`, color: "#c4c4be" }}> age 6 → today</div>
+          <div style={{ font: `400 11px ${MONO}`, color: "#c4c4be" }}> age 0 → today</div>
         </div>
 
         <div
@@ -656,9 +657,21 @@ function Footer() {
         >
           <span>© 2026 MANOJVRADAN</span>
           <div style={{ display: "flex", gap: 24 }}>
-            {["GitHub", "Spotify", "LinkedIn", "Email"].map((l) => (
-              <a key={l} href="#" {...hoverCursor} style={{ color: "#a3a29a" }}>
-                {l}
+            {[
+              { label: "GitHub", href: "#" },
+              { label: "Spotify", href: SPOTIFY_URL },
+              { label: "LinkedIn", href: "#" },
+              { label: "Email", href: "mailto:hello@manojvradan.com" },
+            ].map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                target={l.href.startsWith("http") ? "_blank" : undefined}
+                rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                {...hoverCursor}
+                style={{ color: "#a3a29a" }}
+              >
+                {l.label}
               </a>
             ))}
           </div>
@@ -671,7 +684,7 @@ function Footer() {
 export default function Portfolio() {
   const [persona, setPersona] = useState<Persona>("dev");
   const [open, setOpen] = useState<number | null>(0);
-  const [city, setCity] = useState<CityKey>("Tokyo");
+  const [city, setCity] = useState<CityKey>("Chennai");
 
   const toggle = (i: number) => setOpen((o) => (o === i ? null : i));
   const switchPersona = () => {
@@ -706,20 +719,23 @@ export default function Portfolio() {
               <span>SELECT TO EXPAND</span>
             </Reveal>
 
-            <AccordionItem index={0} open={open} onToggle={toggle} number="01" title="Work" meta="4 selected">
+            <AccordionItem index={0} open={open} onToggle={toggle} number="01" title="About" meta="the person">
+              <AboutSection city={city} onSelectCity={setCity} />
+            </AccordionItem>
+            <AccordionItem index={1} open={open} onToggle={toggle} number="02" title="Work" meta="4 selected">
               <WorkSection />
             </AccordionItem>
-            <AccordionItem index={1} open={open} onToggle={toggle} number="02" title="Awards" meta="2 honours">
+            <AccordionItem index={2} open={open} onToggle={toggle} number="03" title="Awards" meta="2 honours">
               <AwardsSection />
             </AccordionItem>
-            <AccordionItem index={2} open={open} onToggle={toggle} number="03" title="Experience" meta="résumé">
+            <AccordionItem index={3} open={open} onToggle={toggle} number="04" title="Experience" meta="résumé">
               <ExperienceSection />
             </AccordionItem>
             <AccordionItem
-              index={3}
+              index={4}
               open={open}
               onToggle={toggle}
-              number="04"
+              number="05"
               title="Music"
               meta={
                 <>
@@ -727,19 +743,9 @@ export default function Portfolio() {
                   Vrad.N
                 </>
               }
-            >
-              <DevMusicSection />
-            </AccordionItem>
-            <AccordionItem
-              index={4}
-              open={open}
-              onToggle={toggle}
-              number="05"
-              title="About"
-              meta="the person"
               borderBottom
             >
-              <AboutSection city={city} onSelectCity={setCity} />
+              <DevMusicSection />
             </AccordionItem>
           </section>
         </div>

@@ -1,3 +1,5 @@
+export const SPOTIFY_URL = "https://open.spotify.com/artist/0C5FdYrSAb5NrVYZu42HJ6";
+
 export type Tag = { label: string; highlight?: boolean };
 
 export const PROJECTS: {
@@ -128,10 +130,12 @@ export const UPCOMING: {
   },
 ];
 
-export type CityKey = "Tokyo" | "Singapore" | "India" | "Sydney";
+export type CityKey = "Chennai" | "Tokyo" | "Singapore" | "India" | "Sydney";
 
 // left/top are percentages within the map container, matching the real
-// geographic positions projected into the map's 1600×900 (16:9) viewBox.
+// geographic positions projected into the map's 1600×900 (16:9) viewBox
+// (Chennai/Vellore are nudged apart slightly — they're ~140km apart in
+// reality and would otherwise overlap at this map scale).
 export const CITIES: {
   key: CityKey;
   age: string;
@@ -140,8 +144,9 @@ export const CITIES: {
   ageRange: string;
   panelTitle: string;
 }[] = [
+  { key: "Chennai", age: "0", left: 27.98, top: 39.35, ageRange: "AGE 0 → 6 · BORN HERE", panelTitle: "Chennai, India" },
   { key: "Tokyo", age: "6", left: 68.53, top: 9.25, ageRange: "AGE 6 → 12", panelTitle: "Tokyo, Japan" },
   { key: "Singapore", age: "12", left: 46.14, top: 47.39, ageRange: "AGE 12 → 18", panelTitle: "Singapore" },
-  { key: "India", age: "18", left: 30.71, top: 34.54, ageRange: "AGE 18 → 20 · UNIVERSITY", panelTitle: "Vellore, India" },
+  { key: "India", age: "18", left: 34.14, top: 30.09, ageRange: "AGE 18 → 20 · UNIVERSITY", panelTitle: "Vellore, India" },
   { key: "Sydney", age: "20", left: 75.76, top: 86.52, ageRange: "AGE 20 → NOW · TRANSFERRED", panelTitle: "Sydney, Australia" },
 ];
