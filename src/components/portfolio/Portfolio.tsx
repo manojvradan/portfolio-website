@@ -112,9 +112,9 @@ function DevHero() {
           TWO TAB VRIDDY
         </div>
         <h1 style={{ font: `600 clamp(52px,9.5vw,118px)/0.9 ${SANS}`, letterSpacing: "-.045em", margin: 0 }}>
-          Code,
+          I write
           <br />
-          carefully.
+          Code.
           <br />
           <span style={{ color: "#c4c4be" }}>Music, too.</span>
         </h1>
@@ -321,7 +321,7 @@ function AboutSection({
     Tokyo: [
       "/images/tokyo/13151714694_83bccb6159_o.jpg",
       "/images/tokyo/13902750636_4fea58df85_o.jpg",
-      "/images/tokyo/IMG_9300.JPG",
+      "/images/tokyo/DSC_0025_Original.jpg",
     ],
     Singapore: [
       "/images/singapore/IMG_0453.jpg",
@@ -350,6 +350,68 @@ function AboutSection({
   });
 
   const active = CITIES.find((c) => c.key === city)!;
+  const idx = CITIES.findIndex((c) => c.key === city);
+  const prevCity = idx > 0 ? CITIES[idx - 1] : null;
+  const nextCity = idx < CITIES.length - 1 ? CITIES[idx + 1] : null;
+
+  const NavArrow = ({
+    dir,
+    target,
+  }: {
+    dir: "prev" | "next";
+    target: (typeof CITIES)[number] | null;
+  }) => {
+    const chevron = dir === "prev" ? "‹" : "›";
+    if (!target) {
+      return (
+        <div
+          aria-hidden
+          style={{
+            width: 22,
+            flexShrink: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            font: `300 30px ${SANS}`,
+            color: "#e0e0db",
+          }}
+        >
+          {chevron}
+        </div>
+      );
+    }
+    return (
+      <button
+        {...hoverCursor}
+        onClick={() => onSelectCity(target.key)}
+        aria-label={`${dir === "prev" ? "Where I came from" : "Where I went next"}: ${target.pinLabel}`}
+        title={`${dir === "prev" ? "Before" : "Next"}: ${target.pinLabel}`}
+        style={{
+          width: 22,
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          background: "transparent",
+          border: "none",
+          padding: 0,
+          font: `300 30px ${SANS}`,
+          lineHeight: 1,
+          color: "#9a9a96",
+          transition: "color .2s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = "#1db954";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = "#9a9a96";
+        }}
+      >
+        {chevron}
+      </button>
+    );
+  };
 
   return (
     <>
@@ -516,34 +578,35 @@ function AboutSection({
               <span style={{ font: `600 17px ${SANS}` }}>{active.panelTitle}</span>
               <span style={{ font: `400 12px ${MONO}`, color: "#9a9a96" }}>{active.ageRange}</span>
             </div>
-            <div className="pf-photo-grid">
-              {cityImages[city].length > 0
-                ? cityImages[city].map((src, i) => (
-                    <div
-                      key={src}
-                      style={{ aspectRatio: "4/5", borderRadius: 12, overflow: "hidden", border: "1px solid #e6e6e2" }}
-                    >
-                      <img
-                        src={src}
-                        alt={`${city} · photo ${i + 1}`}
-                        loading="lazy"
-                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                      />
-                    </div>
-                  ))
-                : Array.from({ length: 3 }).map((_, i) => (
-                    <div
-                      key={i}
-                      style={{ aspectRatio: "4/5", borderRadius: 12, overflow: "hidden", border: "1px solid #e6e6e2" }}
-                    >
-                      <PhotoSlot label={`${city} · photo ${i + 1}`} />
-                    </div>
-                  ))}
+            <div style={{ display: "flex", alignItems: "stretch", gap: 10 }}>
+              <NavArrow dir="prev" target={prevCity} />
+              <div className="pf-photo-grid" style={{ flex: 1, minWidth: 0 }}>
+                {cityImages[city].length > 0
+                  ? cityImages[city].map((src, i) => (
+                      <div
+                        key={src}
+                        style={{ aspectRatio: "4/5", borderRadius: 12, overflow: "hidden", border: "1px solid #e6e6e2" }}
+                      >
+                        <img
+                          src={src}
+                          alt={`${city} · photo ${i + 1}`}
+                          loading="lazy"
+                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        />
+                      </div>
+                    ))
+                  : Array.from({ length: 3 }).map((_, i) => (
+                      <div
+                        key={i}
+                        style={{ aspectRatio: "4/5", borderRadius: 12, overflow: "hidden", border: "1px solid #e6e6e2" }}
+                      >
+                        <PhotoSlot label={`${city} · photo ${i + 1}`} />
+                      </div>
+                    ))}
+              </div>
+              <NavArrow dir="next" target={nextCity} />
             </div>
           </div>
-          <p style={{ font: `400 11.5px ${MONO}`, color: "#c4c4be", margin: "14px 0 0" }}>
-            Drag your photos onto the frames — they&apos;ll stick.
-          </p>
         </div>
       </div>
     </>
