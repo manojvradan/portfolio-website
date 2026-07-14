@@ -1,15 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #111827;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
 html {
@@ -17,16 +10,128 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: var(--font-sans);
 }
 
-* {
-  box-sizing: border-box;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 ::selection {
-  background: #fbbf24;
-  color: #111827;
+  background: #1db954;
+  color: #fff;
+}
+
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.28);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes personaIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid #141414;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition:
+    width 0.2s,
+    height 0.2s,
+    background 0.2s,
+    border-color 0.2s,
+    opacity 0.3s;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring--active {
+  width: 58px !important;
+  height: 58px !important;
+  background: #1db954 !important;
+  border-color: #1db954 !important;
+}
+
+@media (hover: none) {
+  .cursor-ring {
+    display: none;
+  }
+}
+
+.pf-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 640px) {
+  .pf-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pf-about-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .pf-about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pf-exp-row {
+  display: grid;
+  grid-template-columns: 130px 1fr auto;
+  gap: 24px;
+  align-items: baseline;
+}
+
+@media (max-width: 640px) {
+  .pf-exp-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+.pf-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 480px) {
+  .pf-photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

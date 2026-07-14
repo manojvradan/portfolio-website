@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetBrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Manoj | Personal Portfolio",
-  description: "A modern personal website that reflects personality, values, and achievements.",
+  title: "Manojvradan — Software Engineer & Vrad.N",
+  description:
+    "Manojvradan — a software engineer who ships clean, considered products, and an artist who writes & produces music as Vrad.N. Based in Sydney, Australia.",
 };
 
 export default function RootLayout({
@@ -25,7 +28,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+      className={`${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
