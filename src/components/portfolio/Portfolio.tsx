@@ -321,7 +321,7 @@ function AboutSection({
     Tokyo: [
       "/images/tokyo/13151714694_83bccb6159_o.jpg",
       "/images/tokyo/13902750636_4fea58df85_o.jpg",
-      "/images/tokyo/DSC_0025_Original.jpg",
+      "/images/tokyo/DSC_0025_Original.JPG",
     ],
     Singapore: [
       "/images/singapore/IMG_0453.jpg",
