@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import CustomCursor, { hoverCursor } from "./CustomCursor";
 import Reveal from "./Reveal";
@@ -25,7 +25,6 @@ import {
   SPOTIFY_URL,
   UPCOMING,
   type CityKey,
-  type Media,
   type Project,
 } from "./data";
 import { FLIGHT_PATHS, MAP_VIEWBOX, WORLD_LAND_PATH } from "./worldMap";
@@ -257,36 +256,9 @@ function TagPill({ label, highlight }: { label: string; highlight?: boolean }) {
   );
 }
 
-function WorkImage({
-  src,
-  label,
-  natural,
-}: {
-  src?: string;
-  label: string;
-  natural?: boolean;
-}) {
+function WorkImage({ src, label }: { src?: string; label: string }) {
   const [errored, setErrored] = useState(false);
-  if (!src || errored) {
-    return natural ? (
-      <div style={{ width: "100%", aspectRatio: "3/2" }}>
-        <PhotoSlot label={label} />
-      </div>
-    ) : (
-      <PhotoSlot label={label} />
-    );
-  }
-  if (natural) {
-    return (
-      <img
-        src={src}
-        alt={label}
-        loading="lazy"
-        onError={() => setErrored(true)}
-        className="pf-work-modal-img"
-      />
-    );
-  }
+  if (!src || errored) return <PhotoSlot label={label} />;
   return (
     <img
       src={src}
@@ -298,25 +270,7 @@ function WorkImage({
   );
 }
 
-const MODAL_PANEL: CSSProperties = {
-  position: "relative",
-  background: "#fbfbfa",
-  color: "#141414",
-  borderRadius: 20,
-  overflow: "hidden",
-  boxShadow: "0 30px 80px rgba(0,0,0,.35)",
-  animation: "modalPop .32s cubic-bezier(.2,.8,.2,1) both",
-};
-
-function ModalOverlay({
-  label,
-  onClose,
-  children,
-}: {
-  label: string;
-  onClose: () => void;
-  children: ReactNode;
-}) {
+function WorkModal({ project, onClose }: { project: Project; onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -330,75 +284,73 @@ function ModalOverlay({
     };
   }, [onClose]);
 
-  if (typeof document === "undefined") return null;
 
-  return createPortal(
+  return (
     <div
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={label}
+      aria-label={`${project.title} — details`}
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 1000,
+        zIndex: 100,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: 24,
+        padding: 20,
         background: "rgba(18,18,16,.55)",
         backdropFilter: "blur(6px)",
         animation: "modalFade .25s ease both",
       }}
     >
-      {children}
-    </div>,
-    document.body
-  );
-}
-
-function ModalCloseButton({ onClose }: { onClose: () => void }) {
-  return (
-    <button
-      {...hoverCursor}
-      onClick={onClose}
-      aria-label="Close"
-      style={{
-        position: "absolute",
-        top: 14,
-        right: 14,
-        zIndex: 2,
-        width: 34,
-        height: 34,
-        borderRadius: "50%",
-        border: "none",
-        cursor: "pointer",
-        background: "rgba(18,18,16,.6)",
-        backdropFilter: "blur(4px)",
-        color: "#fff",
-        font: `400 15px ${SANS}`,
-        lineHeight: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      ✕
-    </button>
-  );
-}
-
-function WorkModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  return (
-    <ModalOverlay label={`${project.title} — details`} onClose={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="pf-work-modal" style={MODAL_PANEL}>
-        <div className="pf-work-modal-media">
-          <WorkImage src={project.image} label={`${project.title} — photo`} natural />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: 680,
+          maxHeight: "88vh",
+          display: "flex",
+          flexDirection: "column",
+          background: "#fbfbfa",
+          color: "#141414",
+          borderRadius: 20,
+          overflow: "hidden",
+          boxShadow: "0 30px 80px rgba(0,0,0,.35)",
+          animation: "modalPop .32s cubic-bezier(.2,.8,.2,1) both",
+        }}
+      >
+        <div style={{ position: "relative", aspectRatio: "16/9", flexShrink: 0 }}>
+          <WorkImage src={project.image} label={`${project.title} — photo`} />
+          <button
+            {...hoverCursor}
+            onClick={onClose}
+            aria-label="Close"
+            style={{
+              position: "absolute",
+              top: 14,
+              right: 14,
+              width: 34,
+              height: 34,
+              borderRadius: "50%",
+              border: "none",
+              cursor: "pointer",
+              background: "rgba(18,18,16,.6)",
+              backdropFilter: "blur(4px)",
+              color: "#fff",
+              font: `400 18px ${SANS}`,
+              lineHeight: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ✕
+          </button>
         </div>
 
-        <ModalCloseButton onClose={onClose} />
-
-        <div style={{ padding: "30px 32px", overflowY: "auto", maxHeight: "86vh", minHeight: 0 }}>
+        <div style={{ padding: "26px 30px 32px", overflowY: "auto" }}>
           <div
             style={{
               font: `500 10.5px ${MONO}`,
@@ -411,31 +363,7 @@ function WorkModal({ project, onClose }: { project: Project; onClose: () => void
             {project.location ? ` · ${project.location.toUpperCase()}` : ""}
           </div>
           <h3 style={{ font: `600 30px/1.05 ${SANS}`, letterSpacing: "-.02em", margin: 0 }}>
-            {project.link ? (
-              <a
-                href={project.link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                {...hoverCursor}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "baseline",
-                  gap: 9,
-                  transition: "color .2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#1db954";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#141414";
-                }}
-              >
-                {project.title}
-                <span style={{ font: `400 20px ${SANS}` }}>↗</span>
-              </a>
-            ) : (
-              project.title
-            )}
+            {project.title}
           </h3>
           <div style={{ font: `400 14px ${SANS}`, color: "#6e6e69", marginTop: 7 }}>
             {project.role} · {project.org}
@@ -493,128 +421,7 @@ function WorkModal({ project, onClose }: { project: Project; onClose: () => void
           )}
         </div>
       </div>
-    </ModalOverlay>
-  );
-}
-
-function AwardMedia({ item, label }: { item: Media; label: string }) {
-  const [errored, setErrored] = useState(false);
-  if (errored) {
-    return (
-      <div style={{ width: "100%", aspectRatio: "3/2" }}>
-        <PhotoSlot label={label} />
-      </div>
-    );
-  }
-  if (item.type === "video") {
-    return (
-      <video
-        src={item.src}
-        controls
-        playsInline
-        onError={() => setErrored(true)}
-        style={{ width: "100%", display: "block", borderRadius: 12, background: "#000" }}
-      />
-    );
-  }
-  return (
-    <img
-      src={item.src}
-      alt={label}
-      loading="lazy"
-      onError={() => setErrored(true)}
-      style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }}
-    />
-  );
-}
-
-function AwardModal({
-  award,
-  onClose,
-}: {
-  award: (typeof AWARDS)[number];
-  onClose: () => void;
-}) {
-  const media = award.media ?? [];
-  return (
-    <ModalOverlay label={`${award.title} — details`} onClose={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="pf-work-modal" style={MODAL_PANEL}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 12,
-            padding: 16,
-            background: "#f0efec",
-            overflowY: "auto",
-            maxHeight: "86vh",
-          }}
-        >
-          {media.length > 0 ? (
-            media.map((m, i) => (
-              <AwardMedia key={i} item={m} label={`${award.title} — media ${i + 1}`} />
-            ))
-          ) : (
-            <div style={{ width: "100%", aspectRatio: "3/2" }}>
-              <PhotoSlot label="photos / videos" />
-            </div>
-          )}
-        </div>
-
-        <ModalCloseButton onClose={onClose} />
-
-        <div style={{ padding: "30px 32px", overflowY: "auto", maxHeight: "86vh", minHeight: 0 }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              gap: 12,
-              marginBottom: 14,
-            }}
-          >
-            <span
-              style={{
-                font: `500 10.5px ${MONO}`,
-                letterSpacing: ".14em",
-                color: award.accent ? "#1db954" : "#6e6e69",
-              }}
-            >
-              {award.kind}
-            </span>
-            <span style={{ font: `400 12px ${MONO}`, color: "#9a9a96" }}>{award.year}</span>
-          </div>
-          <h3 style={{ font: `600 28px/1.1 ${SANS}`, letterSpacing: "-.02em", margin: 0 }}>
-            {award.title}
-          </h3>
-          <p style={{ font: `400 14.5px/1.6 ${SANS}`, color: "#3a3a35", margin: "16px 0 0" }}>
-            {award.desc}
-          </p>
-
-          {award.link && (
-            <a
-              href={award.link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              {...hoverCursor}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                marginTop: 22,
-                font: `500 13px ${SANS}`,
-                color: "#141414",
-                border: "1px solid #141414",
-                borderRadius: 22,
-                padding: "9px 18px",
-              }}
-            >
-              {award.link.label} ↗
-            </a>
-          )}
-        </div>
-      </div>
-    </ModalOverlay>
+    </div>
   );
 }
 
@@ -676,86 +483,32 @@ function WorkSection() {
 }
 
 function AwardsSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   return (
-    <>
-      <div className="pf-grid-2">
-        {AWARDS.map((a, i) => (
-          <div
-            key={a.title}
-            {...hoverCursor}
-            onClick={() => setOpenIndex(i)}
-            style={{
-              border: "1px solid #e6e6e2",
-              borderRadius: 14,
-              padding: 28,
-              background: "#fff",
-              cursor: "pointer",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span
-                style={{
-                  font: `400 12px ${MONO}`,
-                  color: a.accent ? "#1db954" : "#6e6e69",
-                  letterSpacing: ".1em",
-                }}
-              >
-                {a.kind}
-              </span>
-              <span style={{ font: `400 12px ${MONO}`, color: "#9a9a96" }}>{a.year}</span>
-            </div>
-            <h3 style={{ font: `600 27px/1.15 ${SANS}`, letterSpacing: "-.02em", margin: "18px 0 8px" }}>
-              {a.title}
-            </h3>
-            <p style={{ font: `400 14px/1.55 ${SANS}`, color: "#6e6e69", margin: 0 }}>{a.desc}</p>
-            <div
+    <div className="pf-grid-2">
+      {AWARDS.map((a) => (
+        <div
+          key={a.title}
+          style={{ border: "1px solid #e6e6e2", borderRadius: 14, padding: 28, background: "#fff" }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 12,
-                marginTop: "auto",
-                paddingTop: 20,
+                font: `400 12px ${MONO}`,
+                color: a.accent ? "#1db954" : "#6e6e69",
+                letterSpacing: ".1em",
               }}
             >
-              <span
-                style={{
-                  font: `500 10.5px ${MONO}`,
-                  letterSpacing: ".1em",
-                  color: "#9a9a96",
-                }}
-              >
-                VIEW PHOTOS →
-              </span>
-              {a.link && (
-                <a
-                  href={a.link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  {...hoverCursor}
-                  onClick={(e) => e.stopPropagation()}
-                  style={{
-                    font: `500 12.5px ${SANS}`,
-                    color: "#141414",
-                    borderBottom: "1px solid #141414",
-                    paddingBottom: 2,
-                  }}
-                >
-                  {a.link.label} ↗
-                </a>
-              )}
-            </div>
+              {a.kind}
+            </span>
+            <span style={{ font: `400 12px ${MONO}`, color: "#9a9a96" }}>{a.year}</span>
           </div>
-        ))}
-      </div>
-      {openIndex !== null && (
-        <AwardModal award={AWARDS[openIndex]} onClose={() => setOpenIndex(null)} />
-      )}
-    </>
+          <h3 style={{ font: `600 27px/1.15 ${SANS}`, letterSpacing: "-.02em", margin: "18px 0 8px" }}>
+            {a.title}
+          </h3>
+          <p style={{ font: `400 14px/1.55 ${SANS}`, color: "#6e6e69", margin: 0 }}>{a.desc}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -833,67 +586,6 @@ function InspirationSection() {
   );
 }
 
-function NavArrow({
-  dir,
-  target,
-  onSelect,
-}: {
-  dir: "prev" | "next";
-  target: (typeof CITIES)[number] | null;
-  onSelect: (c: CityKey) => void;
-}) {
-  const chevron = dir === "prev" ? "‹" : "›";
-  if (!target) {
-    return (
-      <div
-        aria-hidden
-        style={{
-          width: 22,
-          flexShrink: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          font: `300 30px ${SANS}`,
-          color: "#e0e0db",
-        }}
-      >
-        {chevron}
-      </div>
-    );
-  }
-  return (
-    <button
-      {...hoverCursor}
-      onClick={() => onSelect(target.key)}
-      aria-label={`${dir === "prev" ? "Where I came from" : "Where I went next"}: ${target.pinLabel}`}
-      title={`${dir === "prev" ? "Before" : "Next"}: ${target.pinLabel}`}
-      style={{
-        width: 22,
-        flexShrink: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        background: "transparent",
-        border: "none",
-        padding: 0,
-        font: `300 30px ${SANS}`,
-        lineHeight: 1,
-        color: "#9a9a96",
-        transition: "color .2s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.color = "#1db954";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.color = "#9a9a96";
-      }}
-    >
-      {chevron}
-    </button>
-  );
-}
-
 function AboutSection({
   city,
   onSelectCity,
@@ -942,6 +634,65 @@ function AboutSection({
   const idx = CITIES.findIndex((c) => c.key === city);
   const prevCity = idx > 0 ? CITIES[idx - 1] : null;
   const nextCity = idx < CITIES.length - 1 ? CITIES[idx + 1] : null;
+
+  const NavArrow = ({
+    dir,
+    target,
+  }: {
+    dir: "prev" | "next";
+    target: (typeof CITIES)[number] | null;
+  }) => {
+    const chevron = dir === "prev" ? "‹" : "›";
+    if (!target) {
+      return (
+        <div
+          aria-hidden
+          style={{
+            width: 22,
+            flexShrink: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            font: `300 30px ${SANS}`,
+            color: "#e0e0db",
+          }}
+        >
+          {chevron}
+        </div>
+      );
+    }
+    return (
+      <button
+        {...hoverCursor}
+        onClick={() => onSelectCity(target.key)}
+        aria-label={`${dir === "prev" ? "Where I came from" : "Where I went next"}: ${target.pinLabel}`}
+        title={`${dir === "prev" ? "Before" : "Next"}: ${target.pinLabel}`}
+        style={{
+          width: 22,
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          background: "transparent",
+          border: "none",
+          padding: 0,
+          font: `300 30px ${SANS}`,
+          lineHeight: 1,
+          color: "#9a9a96",
+          transition: "color .2s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = "#1db954";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = "#9a9a96";
+        }}
+      >
+        {chevron}
+      </button>
+    );
+  };
 
   return (
     <>
@@ -1109,7 +860,7 @@ function AboutSection({
               <span style={{ font: `400 12px ${MONO}`, color: "#9a9a96" }}>{active.ageRange}</span>
             </div>
             <div style={{ display: "flex", alignItems: "stretch", gap: 10 }}>
-              <NavArrow dir="prev" target={prevCity} onSelect={onSelectCity} />
+              <NavArrow dir="prev" target={prevCity} />
               <div className="pf-photo-grid" style={{ flex: 1, minWidth: 0 }}>
                 {cityImages[city].length > 0
                   ? cityImages[city].map((src, i) => (
@@ -1134,7 +885,7 @@ function AboutSection({
                       </div>
                     ))}
               </div>
-              <NavArrow dir="next" target={nextCity} onSelect={onSelectCity} />
+              <NavArrow dir="next" target={nextCity} />
             </div>
           </div>
         </div>
@@ -1256,7 +1007,7 @@ function Footer() {
             </h2>
           </div>
           <a
-            href="mailto:manojvradanbs@gmail.com"
+            href="mailto:hello@manojvradan.com"
             {...hoverCursor}
             style={{
               font: `500 15px ${SANS}`,
@@ -1266,7 +1017,7 @@ function Footer() {
               padding: "13px 24px",
             }}
           >
-            manojvradanbs@gmail.com →
+            hello@manojvradan.com →
           </a>
         </Reveal>
         <div
@@ -1288,7 +1039,7 @@ function Footer() {
               { label: "GitHub", href: "#" },
               { label: "Spotify", href: SPOTIFY_URL },
               { label: "LinkedIn", href: "#" },
-              { label: "Email", href: "mailto:manojvradanbs@gmail.com" },
+              { label: "Email", href: "mailto:hello@manojvradan.com" },
             ].map((l) => (
               <a
                 key={l.label}
@@ -1352,7 +1103,7 @@ export default function Portfolio() {
             <AccordionItem index={1} open={open} onToggle={toggle} number="02" title="Work" meta="4 selected">
               <WorkSection />
             </AccordionItem>
-            <AccordionItem index={2} open={open} onToggle={toggle} number="03" title="Awards" meta="3 honours">
+            <AccordionItem index={2} open={open} onToggle={toggle} number="03" title="Awards" meta="2 honours">
               <AwardsSection />
             </AccordionItem>
             <AccordionItem
