@@ -20,7 +20,9 @@ import {
   AWARDS,
   CITIES,
   EXPERIENCE,
+  GITHUB_URL,
   INSPIRATION,
+  LINKEDIN_URL,
   PROJECTS,
   SPOTIFY_URL,
   UPCOMING,
@@ -96,7 +98,7 @@ function TopBar({ persona, onSwitch }: { persona: Persona; onSwitch: () => void 
             userSelect: "none",
           }}
         >
-          <span style={labelStyle(!music)}>Dev</span>
+          <span style={labelStyle(!music)}>Manoj</span>
           <span style={labelStyle(music)}>Vrad.N</span>
         </div>
       </div>
@@ -120,7 +122,7 @@ function DevHero() {
           }}
         >
           <AvailableDot />
-          TWO TAB VRIDDY
+          MANOJ - SOFTWARE ENGINEER
         </div>
         <h1 style={{ font: `600 clamp(52px,9.5vw,118px)/0.9 ${SANS}`, letterSpacing: "-.045em", margin: 0 }}>
           I write
@@ -141,9 +143,7 @@ function DevHero() {
         }}
       >
         <p style={{ maxWidth: 440, font: `400 16px/1.62 ${SANS}`, color: "#4a4a45", margin: 0 }}>
-          I&apos;m Manojvradan — a software engineer who ships clean, considered products, and an
-          artist who writes &amp; produces music as <b style={{ color: "#141414" }}>Vrad.N</b>.
-          Two crafts, one obsession with the details.
+          I&apos;m Manoj — a software engineer who ships clean, considered products.
         </p>
         <NowPlayingMini dark={false} />
       </Reveal>
@@ -209,11 +209,10 @@ function MusicHero() {
               color: "#f4f5f1",
             }}
           >
-            Made after
+            I write
             <br />
-            midnight.
+            music.
             <br />
-            <span style={{ color: "#8b8d85" }}>On repeat.</span>
           </h1>
         </Reveal>
         <Reveal
@@ -229,9 +228,8 @@ function MusicHero() {
           }}
         >
           <p style={{ maxWidth: 440, font: `400 16px/1.62 ${SANS}`, color: "#b6b8b1", margin: 0 }}>
-            The other half of me. I write and sing my own songs as{" "}
-            <b style={{ color: "#f4f5f1" }}>Vrad.N</b>, and I&apos;m learning to produce — building
-            a catalogue one late night at a time.
+            I write and sing my own songs as{" "}
+            <b style={{ color: "#f4f5f1" }}>Vrad.N</b>
           </p>
           <NowPlayingMini dark />
         </Reveal>
@@ -285,7 +283,7 @@ function WorkModal({ project, onClose }: { project: Project; onClose: () => void
   }, [onClose]);
 
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       role="dialog"
@@ -305,14 +303,10 @@ function WorkModal({ project, onClose }: { project: Project; onClose: () => void
       }}
     >
       <div
+        className="pf-work-modal"
         onClick={(e) => e.stopPropagation()}
         style={{
           position: "relative",
-          width: "100%",
-          maxWidth: 680,
-          maxHeight: "88vh",
-          display: "flex",
-          flexDirection: "column",
           background: "#fbfbfa",
           color: "#141414",
           borderRadius: 20,
@@ -321,7 +315,7 @@ function WorkModal({ project, onClose }: { project: Project; onClose: () => void
           animation: "modalPop .32s cubic-bezier(.2,.8,.2,1) both",
         }}
       >
-        <div style={{ position: "relative", aspectRatio: "16/9", flexShrink: 0 }}>
+        <div className="pf-work-modal-media">
           <WorkImage src={project.image} label={`${project.title} — photo`} />
           <button
             {...hoverCursor}
@@ -350,7 +344,7 @@ function WorkModal({ project, onClose }: { project: Project; onClose: () => void
           </button>
         </div>
 
-        <div style={{ padding: "26px 30px 32px", overflowY: "auto" }}>
+        <div className="pf-work-modal-text" style={{ padding: "30px 32px 34px" }}>
           <div
             style={{
               font: `500 10.5px ${MONO}`,
@@ -421,7 +415,8 @@ function WorkModal({ project, onClose }: { project: Project; onClose: () => void
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -538,53 +533,6 @@ function ExperienceSection() {
   );
 }
 
-function InspirationSection() {
-  return (
-    <div>
-      <div
-        style={{
-          font: `500 11px ${MONO}`,
-          color: "#6f7169",
-          letterSpacing: ".12em",
-          marginBottom: 16,
-        }}
-      >
-        ON REPEAT — WHAT SHAPES THE SOUND
-      </div>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {INSPIRATION.map((a) => (
-          <div
-            key={a.n}
-            {...hoverCursor}
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: 16,
-              padding: "14px 0",
-              borderTop: "1px solid #26271f",
-              cursor: "pointer",
-            }}
-          >
-            <span style={{ font: `400 12px ${MONO}`, color: "#4d4f4a", width: 20, flexShrink: 0 }}>
-              {String(a.n).padStart(2, "0")}
-            </span>
-            <span style={{ font: `600 18px ${SANS}`, color: "#f4f5f1", flex: 1 }}>{a.artist}</span>
-            <span
-              style={{
-                font: `400 12px ${MONO}`,
-                color: "#8a8c86",
-                textAlign: "right",
-                maxWidth: "45%",
-              }}
-            >
-              {a.note}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function AboutSection({
   city,
@@ -1007,7 +955,7 @@ function Footer() {
             </h2>
           </div>
           <a
-            href="mailto:hello@manojvradan.com"
+            href="mailto:manojvradanbs@gmail.com"
             {...hoverCursor}
             style={{
               font: `500 15px ${SANS}`,
@@ -1017,7 +965,7 @@ function Footer() {
               padding: "13px 24px",
             }}
           >
-            hello@manojvradan.com →
+            manojvradanbs@gmail.com →
           </a>
         </Reveal>
         <div
@@ -1036,10 +984,10 @@ function Footer() {
           <span>© 2026 MANOJVRADAN</span>
           <div style={{ display: "flex", gap: 24 }}>
             {[
-              { label: "GitHub", href: "#" },
+              { label: "GitHub", href: GITHUB_URL },
               { label: "Spotify", href: SPOTIFY_URL },
-              { label: "LinkedIn", href: "#" },
-              { label: "Email", href: "mailto:hello@manojvradan.com" },
+              { label: "LinkedIn", href: LINKEDIN_URL },
+              { label: "Email", href: "mailto:manojvradanbs@gmail.com" },
             ].map((l) => (
               <a
                 key={l.label}
@@ -1172,17 +1120,6 @@ export default function Portfolio() {
               <ListenSection />
             </AccordionItem>
             <AccordionItem
-              index={3}
-              open={open}
-              onToggle={toggle}
-              number="04"
-              title="Inspiration"
-              meta="music I listen to"
-              dark
-            >
-              <InspirationSection />
-            </AccordionItem>
-            <AccordionItem
               index={4}
               open={open}
               onToggle={toggle}
@@ -1197,7 +1134,6 @@ export default function Portfolio() {
           </section>
         </div>
       )}
-
       <Footer />
     </div>
   );

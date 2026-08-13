@@ -1,4 +1,6 @@
 export const SPOTIFY_URL = "https://open.spotify.com/artist/0C5FdYrSAb5NrVYZu42HJ6";
+export const LINKEDIN_URL = "https://www.linkedin.com/in/manojvradan/";
+export const GITHUB_URL = "https://github.com/manojvradan"
 
 export type Tag = { label: string; highlight?: boolean };
 
@@ -24,7 +26,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Align",
     year: "2026",
-    desc: "My thesis (86 WAM) — a full-stack internship recommender with NLP résumé parsing and a hybrid recommender wrapped in an LLM context layer, lifting match accuracy by 65%. React front end on a FastAPI microservice backend.",
+    desc: "My thesis — a full-stack internship recommender with NLP résumé parsing and a hybrid recommender wrapped in an LLM context layer, lifting match accuracy by 65%. React front end on a FastAPI microservice backend.",
     tags: [
       { label: "+65% accuracy ★", highlight: true },
       { label: "React" },
@@ -179,8 +181,8 @@ export const EXPERIENCE: {
 ];
 
 export const TOP_TRACKS: { n: number; title: string; time: string }[] = [
-  { n: 1, title: "Afterglow", time: "3:18" },
-  { n: 2, title: "Track Title", time: "2:54" },
+  { n: 1, title: "What she sayin'", time: "3:18" },
+  { n: 2, title: "Call Me", time: "2:54" },
   { n: 3, title: "Another One", time: "3:41" },
 ];
 
@@ -198,8 +200,8 @@ export const RELEASES: {
   time: string;
   playing?: boolean;
 }[] = [
-  { title: "Afterglow", meta: "Single · 2026", time: "3:18", playing: true },
-  { title: "Song Title", meta: "Single · 2025 · swap in real track", time: "2:54" },
+  { title: "What she sayin'", meta: "Single · 2026", time: "3:18", playing: true },
+  { title: "Call Me", meta: "Single · 2022 · swap in real track", time: "2:54" },
   { title: "Another One", meta: "Single · 2025", time: "3:41" },
   { title: "Demo / Cover", meta: "Single · 2024", time: "2:37" },
 ];

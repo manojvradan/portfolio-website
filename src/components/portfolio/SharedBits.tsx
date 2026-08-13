@@ -48,11 +48,9 @@ export function AvailableDot() {
   return (
     <span
       style={{
-        width: 7,
-        height: 7,
-        borderRadius: "50%",
-        background: "#1db954",
-        boxShadow: "0 0 0 4px rgba(29,185,84,.16)",
+        width: 14,
+        height: 1,
+        background: "currentColor",
       }}
     />
   );
@@ -99,7 +97,7 @@ export function NowPlayingMini({ dark }: { dark: boolean }) {
             color: dark ? "#f4f5f1" : undefined,
           }}
         >
-          Afterglow
+          What she sayin
         </div>
         <div style={{ font: `400 11px ${SANS}`, color: dark ? "#8a8c86" : "#9a9a96" }}>
           Vrad.N
@@ -149,7 +147,7 @@ export function NowPlayingCard({ dark }: { dark: boolean }) {
           <div style={{ font: `500 9px ${MONO}`, color: "#1db954", letterSpacing: ".14em" }}>
             NOW PLAYING
           </div>
-          <div style={{ font: `600 24px/1.1 ${SANS}`, marginTop: 4 }}>Afterglow</div>
+          <div style={{ font: `600 24px/1.1 ${SANS}`, marginTop: 4 }}>What she sayin'</div>
           <div style={{ font: `400 13px ${SANS}`, color: "#9a9c98", marginTop: 2 }}>
             Vrad.N · Single
           </div>
