@@ -653,6 +653,8 @@ function AboutSection({
             letterSpacing: "-.01em",
           }}
         >
+          I love writing software that feels like magic
+          
           I split my time between writing software and writing songs. As an engineer I care about
           clean systems and thoughtful interfaces; as <b>Vrad.N</b> I sing, and I&apos;m learning
           to produce — chasing the same feeling in both, the moment something finally clicks.
